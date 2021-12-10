@@ -19,6 +19,8 @@ import pandas as pd
 server = Flask(__name__)
 app = dash.Dash(__name__, server=server, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+search = ""
+
 # the style arguments for the sidebar. We use position:fixed and a fixed width
 SIDEBAR_STYLE = {
     "position": "fixed",
@@ -42,7 +44,7 @@ sidebar = html.Div(
     [
         html.H2("Sidebar", className="display-4"),
         html.Hr(),
-        html.P("A simple sidebar layout with navigation links", className="lead"),
+        # add a search box
         dbc.Nav(
             [
                 dbc.NavLink("Home", href="/", active="exact"),
@@ -81,9 +83,11 @@ def toucanrarity():
     """
     this is a page that displays the toucan rarity
     """
-    toucan_rarity = pd.read_csv("toucans_rarity.csv")
+    df = pd.read_csv("toucans_rarity.csv").sort_values(
+        by=["mean_trait_rarity"], ascending=False
+    )
 
-    toucan_rarity = toucan_rarity[
+    df = df[
         [
             "name",
             "Eyes",
@@ -97,8 +101,7 @@ def toucanrarity():
         ]
     ]
 
-    # order by mean_trait_rarity
-    toucan_rarity = toucan_rarity.sort_values(by=["mean_trait_rarity"], ascending=False)
+    # get rows between 100 and 200
 
     return html.Div(
         [
@@ -106,7 +109,7 @@ def toucanrarity():
             html.Hr(),
             # use dbc to make a table of sprints
             dbc.Table.from_dataframe(
-                toucan_rarity,
+                df,
                 striped=True,
                 bordered=True,
                 hover=True,
