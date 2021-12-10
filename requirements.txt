@@ -7,3 +7,4 @@ requests
 pydantic
 uvicorn
 flask
+gunicorn
