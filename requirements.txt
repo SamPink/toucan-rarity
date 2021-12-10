@@ -1,0 +1,9 @@
+pandas
+dash
+plotly
+dash_bootstrap_components
+pymongo
+requests
+pydantic
+uvicorn
+flask
